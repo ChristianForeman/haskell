@@ -50,6 +50,7 @@ safetailV3 xs = tail xs
 
 -- three definitions for the || or operator
 -- V1
+{-
 True  || True  = True
 True  || False = True
 False || True  = True
@@ -62,16 +63,18 @@ _     || _     = True
 -- V3
 True  || _ = True 
 False || b = b
+-}
 
 -- Implement && with conditionals
 -- V1
+{-
 (&&) a b = if a then
             if b then True else False 
             else False
 
 -- V2
 (&&) a b = if a then b else False
-
+-}
 
 factors n = [x | x <- [1..n], n `mod` x == 0]
 
@@ -94,3 +97,63 @@ scalarProductV1 xs ys = sum [xs !! i * ys !! i | i <- [0..n-1]]
                         where n = length xs
 
 scalarProductV2 xs ys = sum [x * y | (x,y) <- zip xs ys]
+
+
+-- FP 8 Recursive Functions Excercises
+myAnd :: [Bool] -> Bool
+myAnd [] = True
+myAnd (x:xs) = x && myAnd xs
+
+-- foldr implementation
+myAndV2 :: [Bool] -> Bool
+myAndV2 = foldr (&&) True
+
+myConcat :: [[a]] -> [a]
+myConcat [] = []
+myConcat (xs: xss) = xs ++ myConcat xss
+
+myReplicate :: Int -> a -> [a]
+myReplicate 0 _ = []
+myReplicate n x = x : myReplicate (n - 1) x
+
+-- my impl of !!
+bangBang :: [a] -> Int -> a
+bangBang (x:_) 0 = x
+bangBang (_:xs) n = bangBang xs (n - 1) 
+
+-- find if something is an element of a list
+myElem :: Eq a => a -> [a] -> Bool
+myElem _ [] = False 
+myElem m (x:xs) = (m == x) || (myElem m xs)
+
+-- insertionSort
+myInsert :: Int -> [Int] -> [Int]
+myInsert x [] = [x]
+myInsert x (y:ys) = if x <= y then
+                        x:y:ys
+                    else
+                        y : myInsert x ys
+
+myInsertionSort :: [Int] -> [Int]
+myInsertionSort [] = []
+myInsertionSort (x:xs) = myInsert x (myInsertionSort xs)
+
+-- Merge sort
+myMerge :: Ord a => [a] -> [a] -> [a]
+myMerge [] [] = []
+myMerge xs [] = xs
+myMerge [] ys = ys
+myMerge (x:xs) (y:ys) | x < y     = x : myMerge xs (y:ys)
+                      | otherwise = y : myMerge (x:xs) ys
+
+myHalve :: [a] -> ([a],[a])
+myHalve [] = ([],[])
+myHalve xs = splitAt (fst (l `divMod` 2)) xs
+                where l = length xs
+
+
+myMSort :: Ord a => [a] -> [a]
+myMSort [] = []
+myMSort [x] = [x]
+myMSort xs = myMerge (myMSort ys) (myMSort zs)
+                where (ys, zs) = myHalve xs
