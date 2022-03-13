@@ -170,3 +170,5 @@ add (Succ n) m = Succ (add m n)
 mult :: Nat -> Nat -> Nat
 mult Zero     m = Zero
 mult (Succ n) m = add (mult n m) m
+
+data Tree a = Leaf a | Node (Tree a) (Tree a)
