@@ -157,3 +157,16 @@ myMSort [] = []
 myMSort [x] = [x]
 myMSort xs = myMerge (myMSort ys) (myMSort zs)
                 where (ys, zs) = myHalve xs
+
+
+-- Types and Data
+data Nat = Zero | Succ Nat
+
+
+add :: Nat -> Nat -> Nat
+add Zero m = m
+add (Succ n) m = Succ (add m n)
+
+mult :: Nat -> Nat -> Nat
+mult Zero     m = Zero
+mult (Succ n) m = add (mult n m) m
